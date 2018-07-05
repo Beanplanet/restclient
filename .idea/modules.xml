@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/restclient.iml" filepath="$PROJECT_DIR$/.idea/restclient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/restclient-api/restclient-api.iml" filepath="$PROJECT_DIR$/restclient-api/restclient-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/restclient-httpclient/functional-tests/restclient-functional-tests.iml" filepath="$PROJECT_DIR$/restclient-httpclient/functional-tests/restclient-functional-tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/restclient-httpclient/restclient-httpclient/restclient-httpclient.iml" filepath="$PROJECT_DIR$/restclient-httpclient/restclient-httpclient/restclient-httpclient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/restclient-httpclient/restclient-httpclient-build.iml" filepath="$PROJECT_DIR$/restclient-httpclient/restclient-httpclient-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/restclient-httpclient/integration-tests/restclient-integration-tests.iml" filepath="$PROJECT_DIR$/restclient-httpclient/integration-tests/restclient-integration-tests.iml" />
+    </modules>
+  </component>
+</project>

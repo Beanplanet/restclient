@@ -1,6 +1,6 @@
 package org.beanplanet.restclient.domain.http;
 
-import org.beanplanet.restclient.domain.http.util.PropertyTestSupport;
+import org.beanplanet.testing.utils.BeanTestSupport;
 import org.junit.Test;
 
 import java.net.URI;
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 public class HttpRequestTest {
     @Test
     public void properties() {
-        new PropertyTestSupport(new HttpRequest())
+        new BeanTestSupport(new HttpRequest())
                 .withMockitoValuesGenerator()
                 .testProperties()
                 .testBuilderProperties();
