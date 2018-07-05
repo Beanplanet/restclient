@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.beanplanet.restclient.domain.http.util.IterableUtil.nullSafeIterableEnumeration;
+import static org.beanplanet.core.util.IterableUtil.nullSafeEnumerationIterable;
 
 
 /**
@@ -65,7 +65,7 @@ public class HttpRequest extends HttpMessage {
 
     public HttpRequest(HttpServletRequest servletRequest) {
         MultiValuedMap<String, String> headers = new ArrayListValuedHashMap<>();
-        for (String headerName : nullSafeIterableEnumeration(servletRequest.getHeaderNames())) {
+        for (String headerName : nullSafeEnumerationIterable(servletRequest::getHeaderNames)) {
             headers.putAll(String.valueOf(headerName), EnumerationUtils.toList(servletRequest.getHeaders(headerName)));
         }
         setHeaders(headers);
@@ -80,7 +80,7 @@ public class HttpRequest extends HttpMessage {
         }
 
         MultiValuedMap<String, String> queryParams = new ArrayListValuedHashMap<>();
-        for (String queryParamName : nullSafeIterableEnumeration(servletRequest.getParameterNames())) {
+        for (String queryParamName : nullSafeEnumerationIterable(servletRequest::getParameterNames)) {
             queryParams.putAll(queryParamName, Arrays.asList(servletRequest.getParameterValues(queryParamName)));
         }
         this.queryParams = queryParams;

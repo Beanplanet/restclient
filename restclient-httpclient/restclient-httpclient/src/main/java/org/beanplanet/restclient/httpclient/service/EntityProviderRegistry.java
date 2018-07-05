@@ -6,7 +6,7 @@ import org.apache.http.HttpMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.beanplanet.restclient.domain.http.util.IterableUtil.nullSafe;
+import static org.beanplanet.core.util.CollectionUtil.nullSafe;
 
 /**
  * An entity factory which delegates to registered factories by content type.
