@@ -58,8 +58,6 @@
     <orderEntry type="library" name="Maven: org.beanplanet:beanplanet-core:2.0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.beanplanet:beanplanet-testing-proxies:2.0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.beanplanet:beanplanet-testing-core:2.0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.pdfbox:pdfbox:2.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.pdfbox:fontbox:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk15on:1.58" level="project" />
     <orderEntry type="library" name="Maven: org.beanplanet:beanplanet-testing-utils:2.0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-all:1.3" level="project" />

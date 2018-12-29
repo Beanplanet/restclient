@@ -1,7 +1,7 @@
 package org.beanplanet.restclient.service;
 
 
-import org.apache.commons.collections4.MultiValuedMap;
+import org.beanplanet.core.util.MultiValueMap;
 
 import javax.servlet.http.Cookie;
 import java.net.URI;
@@ -39,9 +39,9 @@ public interface RestBuilder {
     String getBaseUri();
     URI getRequestUri();
 
-    MultiValuedMap<String, String> getHeaders();
+    MultiValueMap<String, String> getHeaders();
 
-    MultiValuedMap<String, String> getQueryParams();
+    MultiValueMap<String, String> getQueryParams();
 
     Object getEntity();
 
@@ -49,5 +49,5 @@ public interface RestBuilder {
 
     Boolean getFollowRedirects();
 
-    MultiValuedMap<String, String> getFormParams();
+    MultiValueMap<String, String> getFormParams();
 }

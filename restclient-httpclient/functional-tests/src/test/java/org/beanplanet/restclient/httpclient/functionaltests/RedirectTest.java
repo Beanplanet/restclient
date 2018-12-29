@@ -5,6 +5,7 @@ import org.beanplanet.restclient.service.RestResponse;
 import org.beanplanet.restclient.service.RestService;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -18,11 +19,11 @@ public class RedirectTest {
         int httpStatusCode = restService
                 .createRestBuilder()
                 .followRedirects(false)
-                .baseUri("http://www.google.com")
+                .baseUri("http://www.ft.com")
                 .get(RestResponse::getStatusCode);
 
         // Then
-        assertThat(httpStatusCode, is(302));
+        assertThat(httpStatusCode, anyOf(is(301), is(302)));
     }
 
     @Test
@@ -34,7 +35,7 @@ public class RedirectTest {
         int httpStatusCode = restService
                 .createRestBuilder()
                 .followRedirects(true)
-                .baseUri("http://www.google.com")
+                .baseUri("http://www.ft.com")
                 .get(RestResponse::getStatusCode);
 
         // Then

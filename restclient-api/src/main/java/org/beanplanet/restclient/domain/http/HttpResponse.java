@@ -2,8 +2,8 @@ package org.beanplanet.restclient.domain.http;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.beanplanet.core.util.MultiValueMap;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,7 +29,7 @@ public class HttpResponse extends HttpMessage {
     public HttpResponse() {
     }
 
-    public HttpResponse(int status, MultiValuedMap<String, String> headers) {
+    public HttpResponse(int status, MultiValueMap<String, String> headers) {
         this.statusCode = status;
         setHeaders(headers);
     }

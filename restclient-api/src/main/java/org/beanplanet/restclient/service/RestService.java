@@ -1,7 +1,7 @@
 package org.beanplanet.restclient.service;
 
-import org.beanplanet.restclient.domain.http.HttpRequest;
 import org.apache.commons.collections4.Predicate;
+import org.beanplanet.restclient.domain.http.HttpRequest;
 
 /**
  * Definition of a REST service, supporting all the common HTTP methods.

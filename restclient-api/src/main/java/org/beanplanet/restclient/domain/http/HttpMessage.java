@@ -2,8 +2,9 @@ package org.beanplanet.restclient.domain.http;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import org.beanplanet.core.util.MultiValueListMap;
+import org.beanplanet.core.util.MultiValueMap;
+import org.beanplanet.core.util.MultiValueMapImpl;
 import org.springframework.core.io.Resource;
 
 import java.util.Map;
@@ -16,8 +17,8 @@ import java.util.Map;
 public class HttpMessage {
     /** The headers associated with the message. */
     @JsonSerialize(using = MultiValueMapSerialiser.class)
-    @JsonDeserialize(as = ArrayListValuedHashMap.class, using = MultiValueMapDeserialiser.class)
-    private MultiValuedMap<String, String> headers;
+    @JsonDeserialize(as = MultiValueListMap.class, using = MultiValueMapDeserialiser.class)
+    private MultiValueMap<String, String> headers;
     /** The entity associated with the message. */
     private Resource entity;
 
@@ -26,7 +27,7 @@ public class HttpMessage {
      *
      * @return the headers associated with the message.
      */
-    public MultiValuedMap<String, String> getHeaders() {
+    public MultiValueMap<String, String> getHeaders() {
         return headers;
     }
 
@@ -35,7 +36,7 @@ public class HttpMessage {
      *
      * @param headers the headers associated with the message.
      */
-    public void setHeaders(MultiValuedMap<String, String> headers) {
+    public void setHeaders(MultiValueMap<String, String> headers) {
         this.headers = headers;
     }
 
@@ -51,10 +52,10 @@ public class HttpMessage {
 
     public HttpMessage withHeader(String name, String value) {
         if (headers == null) {
-            this.headers = new ArrayListValuedHashMap<>();
+            this.headers = new MultiValueMapImpl<>();
         }
 
-        headers.put(name, value);
+        headers.addValue(name, value);
         return this;
     }
 

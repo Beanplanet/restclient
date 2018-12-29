@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.apache.commons.collections4.EnumerationUtils;
-import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.http.client.utils.URIBuilder;
+import org.beanplanet.core.util.MultiValueMap;
+import org.beanplanet.core.util.MultiValueMapImpl;
 import org.springframework.core.io.Resource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +15,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static org.beanplanet.core.util.EnumerationUtil.toList;
 import static org.beanplanet.core.util.IterableUtil.nullSafeEnumerationIterable;
 
 
@@ -56,17 +57,20 @@ public class HttpRequest extends HttpMessage {
 
     /** The request query parameters. */
     @JsonSerialize(using = MultiValueMapSerialiser.class)
-    @JsonDeserialize(as = ArrayListValuedHashMap.class, using = MultiValueMapDeserialiser.class)
-    private MultiValuedMap<String, String> queryParams;
+    @JsonDeserialize(as = MultiValueMap.class, using = MultiValueMapDeserialiser.class)
+    private MultiValueMap<String, String> queryParams;
 
 
     public HttpRequest() {
     }
 
     public HttpRequest(HttpServletRequest servletRequest) {
-        MultiValuedMap<String, String> headers = new ArrayListValuedHashMap<>();
+        MultiValueMap<String, String> headers = new MultiValueMapImpl<>();
         for (String headerName : nullSafeEnumerationIterable(servletRequest::getHeaderNames)) {
-            headers.putAll(String.valueOf(headerName), EnumerationUtils.toList(servletRequest.getHeaders(headerName)));
+            Enumeration<String> headerValues = servletRequest.getHeaders(headerName);
+            if ( headerValues != null) {
+                headers.put(String.valueOf(headerName), toList(headerValues));
+            }
         }
         setHeaders(headers);
 
@@ -79,9 +83,9 @@ public class HttpRequest extends HttpMessage {
             throw new IllegalStateException(uriSyntaxEx);
         }
 
-        MultiValuedMap<String, String> queryParams = new ArrayListValuedHashMap<>();
+        MultiValueMap<String, String> queryParams = new MultiValueMapImpl<>();
         for (String queryParamName : nullSafeEnumerationIterable(servletRequest::getParameterNames)) {
-            queryParams.putAll(queryParamName, Arrays.asList(servletRequest.getParameterValues(queryParamName)));
+            queryParams.put(queryParamName, Arrays.asList(servletRequest.getParameterValues(queryParamName)));
         }
         this.queryParams = queryParams;
     }
@@ -250,20 +254,20 @@ public class HttpRequest extends HttpMessage {
         return this;
     }
 
-    public MultiValuedMap<String, String> getQueryParams() {
+    public MultiValueMap<String, String> getQueryParams() {
         return queryParams;
     }
 
-    public void setQueryParams(MultiValuedMap<String, String> queryParams) {
+    public void setQueryParams(MultiValueMap<String, String> queryParams) {
         this.queryParams = queryParams;
     }
 
     public HttpRequest withQueryParam(String name, String value) {
         if (queryParams == null) {
-            this.queryParams = new ArrayListValuedHashMap<>();
+            this.queryParams = new MultiValueMapImpl<>();
         }
 
-        queryParams.put(name, value);
+        queryParams.addValue(name, value);
         return this;
     }
 

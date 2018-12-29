@@ -1,9 +1,9 @@
 package org.beanplanet.restclient.httpclient.service;
 
-import org.beanplanet.restclient.service.NavigationException;
-import org.beanplanet.restclient.service.Navigator;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
+import org.beanplanet.restclient.service.NavigationException;
+import org.beanplanet.restclient.service.Navigator;
 
 import java.util.HashMap;
 import java.util.List;

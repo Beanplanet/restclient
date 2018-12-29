@@ -1,11 +1,7 @@
 package org.beanplanet.restclient.httpclient.service;
 
-import org.beanplanet.restclient.domain.http.HttpRequest;
-import org.beanplanet.restclient.service.*;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.Predicate;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -25,6 +21,10 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.SSLContexts;
+import org.beanplanet.core.util.MultiValueMap;
+import org.beanplanet.core.util.MultiValueMapImpl;
+import org.beanplanet.restclient.domain.http.HttpRequest;
+import org.beanplanet.restclient.service.*;
 import org.springframework.core.io.Resource;
 
 import javax.annotation.PostConstruct;
@@ -221,7 +221,7 @@ public class HttpClientRestService implements RestService {
         private Object                         entity;
         private List<Cookie>                   cookies;
         private Boolean                        followRedirects;
-        private MultiValuedMap<String, String> formParams;
+        private MultiValueMap<String, String> formParams;
 
         @Override
         public HttpCommonsClientRestBuilder baseUri(String baseUri) {
@@ -285,9 +285,9 @@ public class HttpClientRestService implements RestService {
         @Override
         public HttpCommonsClientRestBuilder formParam(String name, String value) {
             if (formParams == null) {
-                this.formParams = new ArrayListValuedHashMap<>();
+                this.formParams = new MultiValueMapImpl<>();
             }
-            formParams.put(name, value);
+            formParams.addValue(name, value);
             return this;
         }
 
@@ -442,12 +442,12 @@ public class HttpClientRestService implements RestService {
         }
 
         @Override
-        public MultiValuedMap<String, String> getHeaders() {
+        public MultiValueMap<String, String> getHeaders() {
             return request.getHeaders();
         }
 
         @Override
-        public MultiValuedMap<String, String> getQueryParams() {
+        public MultiValueMap<String, String> getQueryParams() {
             return request.getQueryParams();
         }
 
@@ -467,7 +467,7 @@ public class HttpClientRestService implements RestService {
         }
 
         @Override
-        public MultiValuedMap<String, String> getFormParams() {
+        public MultiValueMap<String, String> getFormParams() {
             return formParams;
         }
     }

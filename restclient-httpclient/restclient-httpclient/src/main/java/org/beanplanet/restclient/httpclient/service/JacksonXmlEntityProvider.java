@@ -1,6 +1,5 @@
 package org.beanplanet.restclient.httpclient.service;
 
-import org.beanplanet.restclient.httpclient.EntityMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.http.Header;
@@ -10,6 +9,7 @@ import org.apache.http.HttpMessage;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
+import org.beanplanet.restclient.httpclient.EntityMatchers;
 
 import java.io.IOException;
 
