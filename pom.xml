@@ -1,152 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.beanplanet.restclient</groupId>
-    <artifactId>restclient</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <groupId>org.beanplanet</groupId>
+    <artifactId>restclient-project</artifactId>
+    <version>1.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>REST client - Project</name>
-    <description>A client for making RESTful calls simple.</description>
-    <modules>
-        <module>restclient-api</module>
-        <module>restclient-httpclient</module>
-    </modules>
+    <name>Rest Client Project</name>
+    <description>RestClient Project Build</description>
 
     <properties>
-        <!-- PLEASE MAINTAIN IN ALPHABETICAL ORDER -->
-        <apache.httpclient.version>4.5.1</apache.httpclient.version>
-        <commons.collections.version>4.1</commons.collections.version>
-        <commons.lang.version>3.4</commons.lang.version>
-        <hamcrest.version>1.3</hamcrest.version>
-        <jackson.core.version>2.6.3</jackson.core.version>
-        <jackson.databind.version>2.6.4</jackson.databind.version>
-        <java.version>1.8</java.version>
+        <!-- Build Configuration -->
+        <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Plugin versions - in alphabetical order -->
+        <maven.plugin.version>3.11.0</maven.plugin.version>
+
+        <!-- Dependency versions - in alphabetical order -->
+        <beanplanet.version>2.0.1-SNAPSHOT</beanplanet.version>
+        <hamcrest.version>2.2</hamcrest.version>
+        <jackson.version>2.15.1</jackson.version>
         <javax.servlet.version>3.0.1</javax.servlet.version>
-        <joda.time.version>2.7</joda.time.version>
-        <junit.version>4.11</junit.version>
-        <maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
-        <maven.surefire.plugin.version>2.19</maven.surefire.plugin.version>
-	<mockito.version>1.10.19</mockito.version>
-	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.version>3.0.5.RELEASE</spring.version>
+        <junit.version>5.11.2</junit.version>
+        <lombok.version>1.18.30</lombok.version>
+        <mockito.version>5.14.1</mockito.version>
+        <testcontainers-version>1.19.8</testcontainers-version>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>${jackson.core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.databind.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.tomakehurst</groupId>
-                <artifactId>wiremock</artifactId>
-                <version>1.18</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>${joda.time.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-beans</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
-        <!-- PLEASE MAINTAIN IN ALPHABETICAL groupId,artifactId ORDER -->
         <dependency>
-            <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock</artifactId>
-            <version>2.18.0</version>
-            <scope>test</scope>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>commons-httpclient</groupId>
-            <artifactId>commons-httpclient</artifactId>
-            <version>3.1</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
+            <groupId>org.beanplanet</groupId>
+            <artifactId>beanplanet-messages</artifactId>
+            <version>${beanplanet.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Test -->
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>${hamcrest.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>${commons.collections.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons.lang.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${apache.httpclient.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.beanplanet</groupId>
-            <artifactId>beanplanet-core</artifactId>
-            <version>2.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.beanplanet</groupId>
-            <artifactId>beanplanet-testing-utils</artifactId>
-            <version>2.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
-            <version>${hamcrest.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
-            <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers-version}</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
+                <version>${maven.plugin.version}</version>
                 <configuration>
+                    <release>${java.version}</release>
                     <source>${java.version}</source>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <modules>
+        <module>restclient</module>
+    </modules>
 </project>
