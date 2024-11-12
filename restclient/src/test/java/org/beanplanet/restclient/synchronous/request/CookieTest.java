@@ -14,10 +14,10 @@ public class CookieTest extends AbstractContainerisedTest {
         final Cookie cookie = new Cookie("aRequestProtoCookieName", "aRequestProtoCookieValue");
         HttpBinAnythingResponse res = clientBuilder.requestPrototype(r -> r.cookie(cookie))
                                                    .build()
-                                                   .request(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything"))
+                                                   .get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
                                                    .execute()
                                                    .body(HttpBinAnythingResponse.class);
-        assertThat(res.getHttpHeaders().get(Cookie.HTTP_REQUEST_HEADER_NAME), equalTo(cookie.toHttpRequestHeaderValue()));
+        assertThat(res.getHttpHeaders().get(Cookie.HTTP_REQUEST_HEADER_NAME).get(), equalTo(cookie.toHttpRequestHeaderValue()));
     }
 
     @Test
@@ -26,12 +26,11 @@ public class CookieTest extends AbstractContainerisedTest {
         final Cookie cookie = new Cookie("aRequestCookieName", "aRequestCookieValue");
         HttpBinAnythingResponse res = clientBuilder.requestPrototype(r -> r.cookie(protoCookie))
                                                    .build()
-                                                   .request(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
-                                                           .cookie(cookie)
-                                                   )
+                                                   .get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
+                                                   .cookie(cookie)
                                                    .execute()
                                                    .body(HttpBinAnythingResponse.class);
         // Multiple values delimited by semi-colon (;) as cookie attributes can be comma-separated, already
-        assertThat(res.getHttpHeaders().get(Cookie.HTTP_REQUEST_HEADER_NAME), equalTo(protoCookie.toHttpRequestHeaderValue()+"; "+cookie.toHttpRequestHeaderValue()));
+        assertThat(res.getHttpHeaders().get(Cookie.HTTP_REQUEST_HEADER_NAME).get(), equalTo(protoCookie.toHttpRequestHeaderValue() + "; " + cookie.toHttpRequestHeaderValue()));
     }
 }

@@ -22,7 +22,7 @@
         <beanplanet.version>2.0.1-SNAPSHOT</beanplanet.version>
         <hamcrest.version>2.2</hamcrest.version>
         <jackson.version>2.15.1</jackson.version>
-        <javax.servlet.version>3.0.1</javax.servlet.version>
+        <servlet.version>4.0.4</servlet.version>
         <junit.version>5.11.2</junit.version>
         <lombok.version>1.18.30</lombok.version>
         <mockito.version>5.14.1</mockito.version>
@@ -43,9 +43,9 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${javax.servlet.version}</version>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>${servlet.version}</version>
             <scope>provided</scope>
         </dependency>
 

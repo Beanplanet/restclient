@@ -14,7 +14,7 @@ public class RequestUriTest extends AbstractContainerisedTest {
     @ParameterizedTest
     @ValueSource(strings = {"/anything", "/anything/path1", "/anything/path1/path2/", "/get"})
     void givenAUriSpecifiedUsingTheRequestBuilder_whenARequestIsSent_thenTheCorrectUriIsSent(final String expectedPath) {
-        HttpBinAnythingResponse body = client.request(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort() + expectedPath))
+        HttpBinAnythingResponse body = client.get("http://localhost:" + httpbin.getFirstMappedPort() + expectedPath)
                                              .execute()
                                              .body(HttpBinAnythingResponse.class);
         assertThat(body.getUrl(), endsWith(expectedPath));
@@ -25,7 +25,7 @@ public class RequestUriTest extends AbstractContainerisedTest {
     void givenABaseUriSpecifiedOnPrototypeWithNoPath_whenARequestUriPathIsSpecified_thenTheBaseAndUriPathsAreCombined(final String expectedPath) {
         HttpBinAnythingResponse body = clientBuilder.requestPrototype(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort()))
                                                     .build()
-                                                    .request(r -> r.uri(expectedPath))
+                                                    .uri(expectedPath)
                                                     .execute()
                                                     .body(HttpBinAnythingResponse.class);
         assertThat(body.getUrl(), endsWith(expectedPath));
@@ -36,7 +36,7 @@ public class RequestUriTest extends AbstractContainerisedTest {
     void givenABaseUriSpecifiedOnPrototypeWithPath_whenARelativeRequestUriPathIsSpecified_thenTheBaseAndUriPathsAreCombined(final String expectedPath) {
         HttpBinAnythingResponse body = clientBuilder.requestPrototype(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything"))
                                                     .build()
-                                                    .request(r -> r.uri(expectedPath))
+                                                    .uri(expectedPath)
                                                     .execute()
                                                     .body(HttpBinAnythingResponse.class);
         assertThat(body.getUrl(), endsWith(UriUtil.mergePaths("/anything", expectedPath)));
@@ -46,7 +46,7 @@ public class RequestUriTest extends AbstractContainerisedTest {
     void givenABaseUriSpecifiedOnPrototypeWithPath_whenAnAbsoluteRequestUriPathIsSpecified_thenTheBaseAndUriPathsAreCombined() {
         HttpBinAnythingResponse body = clientBuilder.requestPrototype(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything"))
                                                     .build()
-                                                    .request(r -> r.uri("/anything/overrides"))
+                                                    .uri("/anything/overrides")
                                                     .execute()
                                                     .body(HttpBinAnythingResponse.class);
         assertThat(body.getUrl(), endsWith(UriUtil.mergePaths("/anything", "/anything/overrides")));
@@ -56,7 +56,7 @@ public class RequestUriTest extends AbstractContainerisedTest {
     void givenABaseUriSpecifiedOnPrototypeWithPath_whenAnAbsoluteRequestUriIsSpecified_thenTheBaseAndUriPathsAreCombined() {
         HttpBinAnythingResponse body = clientBuilder.requestPrototype(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything"))
                                                     .build()
-                                                    .request(r -> r.uri("http://127.0.0.1:" + httpbin.getFirstMappedPort() + "/anything/overrides"))
+                                                    .uri("http://127.0.0.1:" + httpbin.getFirstMappedPort() + "/anything/overrides")
                                                     .execute()
                                                     .body(HttpBinAnythingResponse.class);
         assertThat(body.getUrl(), endsWith(UriUtil.mergePaths("/anything", "/anything/overrides")));

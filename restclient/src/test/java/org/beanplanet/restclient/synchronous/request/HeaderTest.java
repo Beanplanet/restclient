@@ -12,32 +12,32 @@ public class HeaderTest extends AbstractContainerisedTest {
     void givenARequestProtoTypeWithHeaders_whenSent_thenTheHeadersAreCorrectlySentWitHTheRequest() {
         HttpBinAnythingResponse res = clientBuilder.requestPrototype(r -> r.header("aRequestProtoHeader", "theRequestProtoHeaderValue"))
                                                    .build()
-                                                   .request(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything"))
+                                                   .get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
                                                    .execute()
                                                    .body(HttpBinAnythingResponse.class);
-        assertThat(res.getHttpHeaders().get("aRequestProtoHeader"), equalTo("theRequestProtoHeaderValue"));
+        assertThat(res.getHttpHeaders().get("aRequestProtoHeader").get(), equalTo("theRequestProtoHeaderValue"));
     }
 
     @Test
     void givenARequestWithHeaders_andSpecificRequestHeaders_whenSent_thenTheHeadersAreCorrectlySentWitHTheRequest() {
         HttpBinAnythingResponse res = clientBuilder.requestPrototype(r -> r.header("aRequestProtoHeader", "theRequestProtoHeaderValue"))
                                                    .build()
-                                                   .request(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
-                                                                  .header("aRequestHeader", "theRequestHeaderValue"))
+                                                   .get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
+                                                   .header("aRequestHeader", "theRequestHeaderValue")
                                                    .execute()
                                                    .body(HttpBinAnythingResponse.class);
-        assertThat(res.getHttpHeaders().get("aRequestProtoHeader"), equalTo("theRequestProtoHeaderValue"));
-        assertThat(res.getHttpHeaders().get("aRequestHeader"), equalTo("theRequestHeaderValue"));
+        assertThat(res.getHttpHeaders().get("aRequestProtoHeader").get(), equalTo("theRequestProtoHeaderValue"));
+        assertThat(res.getHttpHeaders().get("aRequestHeader").get(), equalTo("theRequestHeaderValue"));
     }
 
     @Test
     void givenARequestProtoTypeWithHeader_andSpecificSameHeader_whenSent_thenTheHeadersAreCorrectlySentWitHTheRequest() {
         HttpBinAnythingResponse res = clientBuilder.requestPrototype(r -> r.header("aRequestHeader", "theRequestProtoHeaderValue"))
                                                    .build()
-                                                   .request(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
-                                                                  .header("aRequestHeader", "theSpecificRequestHeaderValue"))
+                                                   .get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
+                                                   .header("aRequestHeader", "theSpecificRequestHeaderValue")
                                                    .execute()
                                                    .body(HttpBinAnythingResponse.class);
-        assertThat(res.getHttpHeaders().get("aRequestHeader"), equalTo("theRequestProtoHeaderValue,theSpecificRequestHeaderValue"));
+        assertThat(res.getHttpHeaders().get("aRequestHeader").get(), equalTo("theRequestProtoHeaderValue,theSpecificRequestHeaderValue"));
     }
 }

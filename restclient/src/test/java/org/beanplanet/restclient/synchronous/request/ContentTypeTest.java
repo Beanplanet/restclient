@@ -13,30 +13,29 @@ public class ContentTypeTest extends AbstractContainerisedTest {
     void givenARequestProtoMediaType_whenSent_thenTheContentTypeIsCorrectlySentWitHTheRequest() {
         HttpBinAnythingResponse res = clientBuilder.requestPrototype(r -> r.contentType(MediaTypes.Text.XML))
                                                    .build()
-                                                   .request(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything"))
+                                                   .get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
                                                    .execute()
                                                    .body(HttpBinAnythingResponse.class);
-        assertThat(res.getHttpHeaders().get("Content-Type"), equalTo(MediaTypes.Text.XML.getName()));
+        assertThat(res.getHttpHeaders().get("Content-Type").get(), equalTo(MediaTypes.Text.XML.getName()));
     }
 
     @Test
     void givenARequestProtoContentType_whenSent_thenTheContentTypeIsCorrectlySentWitHTheRequest() {
         HttpBinAnythingResponse res = clientBuilder.requestPrototype(r -> r.contentType(MediaTypes.Image.SVG.getCanonicalForm()))
                                                    .build()
-                                                   .request(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything"))
+                                                   .get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
                                                    .execute()
                                                    .body(HttpBinAnythingResponse.class);
-        assertThat(res.getHttpHeaders().get("Content-Type"), equalTo(MediaTypes.Image.SVG.getName()));
+        assertThat(res.getHttpHeaders().get("Content-Type").get(), equalTo(MediaTypes.Image.SVG.getName()));
     }
 
     @Test
     void givenARequestMediaType_whenSent_thenTheContentTypeIsCorrectlySentWitHTheRequest() {
         HttpBinAnythingResponse res = clientBuilder.build()
-                                                   .request(r -> r.get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
-                                                                  .contentType(MediaTypes.Text.XML)
-                                                   )
+                                                   .get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
+                                                   .contentType(MediaTypes.Text.XML)
                                                    .execute()
                                                    .body(HttpBinAnythingResponse.class);
-        assertThat(res.getHttpHeaders().get("Content-Type"), equalTo(MediaTypes.Text.XML.getName()));
+        assertThat(res.getHttpHeaders().get("Content-Type").get(), equalTo(MediaTypes.Text.XML.getName()));
     }
 }

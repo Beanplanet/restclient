@@ -10,10 +10,9 @@ public class HttpVersionTest extends AbstractContainerisedTest {
     @ParameterizedTest
     @EnumSource(value = Request.Version.class, mode = EnumSource.Mode.EXCLUDE, names = "HTTP_1_0")
     void givenAnHttpVersion_whenARequestWithTheVersionConfigured_thenTheHttpVersionIsSentCorrectly(final Request.Version version) {
-        client.request(r -> r.version(version).get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything"))
+        client.version(version)
+              .get("http://localhost:" + httpbin.getFirstMappedPort() + "/anything")
               .execute()
               .body(HttpBinAnythingResponse.class);
-
     }
-
 }
