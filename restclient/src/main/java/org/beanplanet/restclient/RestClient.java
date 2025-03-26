@@ -3,6 +3,8 @@ package org.beanplanet.restclient;
 import org.beanplanet.core.io.resource.CharSequenceResource;
 import org.beanplanet.core.io.resource.Resource;
 import org.beanplanet.core.lang.Assert;
+import org.beanplanet.core.lang.ParameterisedTypeImpl;
+import org.beanplanet.core.lang.ParameterisedTypeReference;
 import org.beanplanet.core.lang.TypeUtil;
 import org.beanplanet.core.net.http.*;
 import org.beanplanet.core.net.http.converter.HttpMessageBodyConverter;
@@ -13,6 +15,7 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.*;
 
@@ -194,8 +197,8 @@ public class RestClient implements HttpRequest.HttpRequestBuilderSpec<RestClient
         private <T> Resource bodyFromConversion(final T body) {
             Assert.notNull(request, "Something has occurred out of order - the HTTP request has not yet been built!");
             MediaType mediaType = request.getContentType().orElse(MediaTypes.Application.OCTET_STREAM);
-            HttpMessageBodyConverter<T> handler = handlerRegistry.findFromConverters(mediaType, (Class<T>) body.getClass())
-                                                                 .findFirst().orElseThrow(() -> new RestClientException("No handler configured to send request body [" + body.getClass() + "] of media type [" + mediaType.getName() + "]."));
+            HttpMessageBodyConverter<T> handler = (HttpMessageBodyConverter<T>) handlerRegistry.findFromConverters(mediaType, (Class<T>) body.getClass())
+                                                                                               .findFirst().orElseThrow(() -> new RestClientException("No handler configured to send request body [" + body.getClass() + "] of media type [" + mediaType.getName() + "]."));
             return handler.convertTo(body, request);
         }
 
@@ -425,10 +428,39 @@ public class RestClient implements HttpRequest.HttpRequestBuilderSpec<RestClient
                 return bodyConverterFor(responseType).apply(response);
             }
 
+            public <T> T body(final Predicate<HttpResponseStatus> condition,
+                              final ParameterisedTypeReference<T> responseType) throws RestErrorResponseException {
+                if (!condition.test(response.getStatus())) {
+                    throw new RestErrorResponseException(request.getUri().toString(), response.getStatusCode());
+                }
+
+                return bodyConverterFor(responseType).apply(response);
+            }
+
             public <T> T body(final Class<T> responseType) throws RestErrorResponseException {
                 return applyDefaultClientServerErrorResponseHandlers
                         ? bodyOn2xxSuccessful(responseType)
                         : body(response -> bodyConverterFor(responseType).apply(response));
+            }
+
+            public <C> List<C> bodyAsListOf(final Class<C> componentType) throws RestErrorResponseException {
+                return body(ParameterisedTypeReference.forType(new ParameterisedTypeImpl(List.class, componentType)));
+            }
+
+            public <C> Set<C> bodyAsSetOf(final Class<C> componentType) throws RestErrorResponseException {
+                return body(new ParameterisedTypeReference<>() {
+                });
+            }
+
+            public <K, V> Map<K, V> bodyAsSetOf(final Class<K> keyType, final Class<V> valueType) throws RestErrorResponseException {
+                return body(new ParameterisedTypeReference<>() {
+                });
+            }
+
+            public <T> T body(final ParameterisedTypeReference<T> responseType) throws RestErrorResponseException {
+                return applyDefaultClientServerErrorResponseHandlers
+                        ? bodyOn2xxSuccessful(responseType)
+                        : body(response -> null); //bodyConverterFor(responseType).apply(response));
             }
 
             public <T> CompletableFuture<T> bodyCompletable(final Class<T> responseType) throws RestErrorResponseException {
@@ -440,6 +472,10 @@ public class RestClient implements HttpRequest.HttpRequestBuilderSpec<RestClient
             }
 
             public <T> T bodyOn2xxSuccessful(final Class<T> responseType) throws RestErrorResponseException {
+                return body(ResponseStatus::is2xxSuccessful, responseType);
+            }
+
+            public <T> T bodyOn2xxSuccessful(final ParameterisedTypeReference<T> responseType) throws RestErrorResponseException {
                 return body(ResponseStatus::is2xxSuccessful, responseType);
             }
 
@@ -464,8 +500,23 @@ public class RestClient implements HttpRequest.HttpRequestBuilderSpec<RestClient
                     final MediaType mediaType = response.getContentType().orElse(MediaTypes.Application.OCTET_STREAM);
                     return handlerRegistry.findFromConverters(mediaType, responseType)
                                           .findFirst()
+                                          .map(h -> (HttpMessageBodyConverter<T>) h)
                                           .map(h -> h.convertFrom(responseType, response))
                                           .orElseThrow(() -> new RestClientException("Unable to read type [" + TypeUtil.getBaseName(responseType)
+                                                  + "] from HTTP response media type [" + mediaType.getName()
+                                                  + "]: no HTTP message converter between those types was found"
+                                          ));
+                };
+            }
+
+            private <T> Function<Response, T> bodyConverterFor(final ParameterisedTypeReference<T> responseType) {
+                return response -> {
+                    final MediaType mediaType = response.getContentType().orElse(MediaTypes.Application.OCTET_STREAM);
+                    return handlerRegistry.findFromConverters(mediaType, responseType.getType())
+                                          .findFirst()
+                                          .map(h -> (HttpMessageBodyConverter<T>) h)
+                                          .map(h -> h.convertFrom(responseType, response))
+                                          .orElseThrow(() -> new RestClientException("Unable to read type [" + responseType.getType().getTypeName()
                                                   + "] from HTTP response media type [" + mediaType.getName()
                                                   + "]: no HTTP message converter between those types was found"
                                           ));

@@ -1,15 +1,19 @@
 package org.beanplanet.restclient;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
 
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AbstractContainerisedTest {
     static final protected GenericContainer<?> httpbin = new GenericContainer<>("kennethreitz/httpbin:latest")
             .withExposedPorts(80);
+
+    static final protected WireMockServer wireMockServer = new WireMockServer(options().dynamicPort());
 
     protected static RestClient.RestClientBuilder clientBuilder;
     protected static RestClient client;
@@ -23,11 +27,13 @@ public class AbstractContainerisedTest {
      */
     static {
         httpbin.start();
+        wireMockServer.start();
     }
 
     @BeforeAll
     static void beforeAllTests() {
         clientBuilder = RestClient.builder();
         client = clientBuilder.build();
+        wireMockServer.resetAll();
     }
 }
