@@ -20,9 +20,22 @@ import java.util.Map;
  */
 public class JdkHttpClientImplementation implements HttpImplemention {
     private HttpClient client;
+    private final java.time.Duration requestTimeout;
 
     public JdkHttpClientImplementation(final HttpClient client) {
+        this(client, null);
+    }
+
+    /**
+     * An implementation using the given client, every request of which times out after the given duration (a
+     * {@link java.net.http.HttpTimeoutException}) if no response has been received.
+     *
+     * @param client the JDK HTTP client, configured as required (e.g. with a connect timeout).
+     * @param requestTimeout how long each request may take, or null for no limit.
+     */
+    public JdkHttpClientImplementation(final HttpClient client, final java.time.Duration requestTimeout) {
         this.client = client;
+        this.requestTimeout = requestTimeout;
     }
 
     public JdkHttpClientImplementation() {
@@ -44,6 +57,9 @@ public class JdkHttpClientImplementation implements HttpImplemention {
 
         // URI
         jdkRequestBuilder.uri(request.getUri());
+
+        // Timeout
+        if (requestTimeout != null) jdkRequestBuilder.timeout(requestTimeout);
 
         // Version
         jdkRequestBuilder.version(toJdkHttpClientVersion(request.getHttpVersion()));
