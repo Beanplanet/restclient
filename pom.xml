@@ -21,7 +21,6 @@
         <!-- Dependency versions - in alphabetical order -->
         <beanplanet.version>2.0.1-SNAPSHOT</beanplanet.version>
         <hamcrest.version>2.2</hamcrest.version>
-        <jackson.version>2.15.1</jackson.version>
         <servlet.version>4.0.4</servlet.version>
         <junit.version>5.11.2</junit.version>
         <lombok.version>1.18.30</lombok.version>
@@ -31,18 +30,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
